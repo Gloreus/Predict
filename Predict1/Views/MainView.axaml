@@ -3,14 +3,50 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Predict1.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="1000"
              x:Class="Predict1.Views.MainView"
              x:DataType="vm:MainViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid RowDefinitions="10*, 70*, 20*">
+        <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Text="Магические камни. Предсказание" />
+        <Border Grid.Row="1"
+                Margin="10, 5,10,5"
+                BorderThickness="2"
+                BorderBrush="Khaki"
+                CornerRadius="8">
+            <ListBox ItemsSource="{Binding Gems}">
+                <ListBox.Background>
+                    <ImageBrush
+                        AlignmentX="Left"
+                        AlignmentY="Top"
+                        Source="/Assets/Wood/i_1.jpg"
+                        SourceRect="0 0 180 180"
+                        Stretch="Fill"
+                        TileMode="FlipXY"
+                        DestinationRect="0 0 180 180" />
+                </ListBox.Background>
+                
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Kind}"></TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+        <Button Grid.Row="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                CornerRadius="8"
+                Padding="10 5 10 5">
+            Start
+        </Button>
+    </Grid>
 </UserControl>

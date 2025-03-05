@@ -3,7 +3,8 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
-        <entry key="Predict1/Views/MainView.axaml" value="Predict1.Browser/Predict1.Browser.csproj" />
+        <entry key="Predict1/App.axaml" value="Predict1.Desktop/Predict1.Desktop.csproj" />
+        <entry key="Predict1/Views/MainView.axaml" value="Predict1.Desktop/Predict1.Desktop.csproj" />
       </map>
     </option>
   </component>
