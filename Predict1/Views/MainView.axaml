@@ -33,12 +33,30 @@
                         TileMode="FlipXY"
                         DestinationRect="0 0 180 180" />
                 </ListBox.Background>
-                
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Kind}"></TextBlock>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid
+                            Columns="{Binding ColCount}"
+                            Rows="{Binding RowCount}" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+                <ListBox.DataTemplates>
+                    <vm:MyTemplateSelector>
+                        <DataTemplate x:Key="Gem_Red">
+                            <TextBlock Text="Red" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="Gem_Blue">
+                            <TextBlock Text="Blue" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="Gem_White">
+                            <TextBlock Text="White" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="Gem_Yellow">
+                            <TextBlock Text="Yellow" />
+                        </DataTemplate>
+                    </vm:MyTemplateSelector>
+                </ListBox.DataTemplates>
             </ListBox>
         </Border>
         <Button Grid.Row="2"
@@ -49,4 +67,5 @@
             Start
         </Button>
     </Grid>
+
 </UserControl>
