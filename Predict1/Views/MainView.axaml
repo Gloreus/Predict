@@ -19,10 +19,12 @@
             Text="Магические камни. Предсказание" />
         <Border Grid.Row="1"
                 Margin="10, 5,10,5"
+                Padding="0"
                 BorderThickness="2"
                 BorderBrush="Khaki"
                 CornerRadius="8">
-            <ListBox ItemsSource="{Binding Gems}">
+            <ListBox Margin="2" Padding="8"
+                     ItemsSource="{Binding Gems}">
                 <ListBox.Background>
                     <ImageBrush
                         AlignmentX="Left"
@@ -36,6 +38,7 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid
+                            Margin="0"
                             Columns="{Binding ColCount}"
                             Rows="{Binding RowCount}" />
                     </ItemsPanelTemplate>
@@ -44,16 +47,16 @@
                 <ListBox.DataTemplates>
                     <vm:MyTemplateSelector>
                         <DataTemplate x:Key="Gem_Red">
-                            <TextBlock Text="Red" />
+                            <Rectangle Classes="Gem red" />
                         </DataTemplate>
                         <DataTemplate x:Key="Gem_Blue">
-                            <TextBlock Text="Blue" />
+                            <Rectangle Classes="Gem blue" />
                         </DataTemplate>
                         <DataTemplate x:Key="Gem_White">
-                            <TextBlock Text="White" />
+                            <Rectangle Classes="Gem white" />
                         </DataTemplate>
                         <DataTemplate x:Key="Gem_Yellow">
-                            <TextBlock Text="Yellow" />
+                            <Rectangle Classes="Gem yellow" />
                         </DataTemplate>
                     </vm:MyTemplateSelector>
                 </ListBox.DataTemplates>
@@ -67,5 +70,30 @@
             Start
         </Button>
     </Grid>
-
+    <UserControl.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="2" />
+        </Style>
+        <Style Selector="ListBoxItem Rectangle.Gem">
+            <!--
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            -->
+            <Setter Property="Stretch" Value="Fill"></Setter>
+        </Style>
+        
+        <Style Selector="ListBoxItem Rectangle.blue">
+            <Setter Property="Fill" Value="Blue" />
+        </Style>
+        <Style Selector="ListBoxItem Rectangle.white">
+            <Setter Property="Fill" Value="Bisque" />
+        </Style>
+        <Style Selector="ListBoxItem Rectangle.red">
+            <Setter Property="Fill" Value="Firebrick" />
+        </Style>
+        <Style Selector="ListBoxItem Rectangle.yellow">
+            <Setter Property="Fill" Value="YellowGreen" />
+        </Style>
+    </UserControl.Styles>
 </UserControl>

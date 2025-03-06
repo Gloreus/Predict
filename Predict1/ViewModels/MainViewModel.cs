@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Avalonia.Controls;
-using Avalonia.Controls.Templates;
+using System.Linq;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using Avalonia.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 
@@ -22,60 +20,89 @@ public enum GemKind
 public class Gem
 {
     public int Status { get; set; } = 0;
-    public GemKind Kind { get; set; } = 0;
+    public bool IsHot { get; set; } = false;
+    public GemKind Kind { get; set; } = GemKind.White;
     public override string ToString()
     {
         return $"Gem_{Kind}";
     }
 }
 
-public class MyTemplateSelector : IDataTemplate
+public class GemHelper
 {
-    public bool SupportsRecycling => false;
-    [Content]
-    public Dictionary<string, IDataTemplate> Templates {get;} = new Dictionary<string, IDataTemplate>();
-
-    
-    public bool Match(object? data)
-    {
-        return data is Gem;
-    }
-
-    public Control? Build(object? data)
-    {
-        if (data is Gem gem)
-            return Templates[gem.ToString()].Build(data);
-        else return null;
-    }
+    public int KindsCount => Enum.GetNames(typeof(GemKind)).Length; // Количество видов камней
+    public Gem GetNext(int n) => new() { Status = 0, Kind = (GemKind) (n % KindsCount) };
+    public Gem GetRandom() => new() { Status = 0, Kind = (GemKind) Random.Shared.Next( KindsCount) };
 }
-
 
 public partial class MainViewModel : ViewModelBase
 {
-    [ObservableProperty] private string _greeting = "Welcome to Avalonia!";
-
-    public static int ColCount { get; set; } = 14;
-    public static int RowCount { get; set; } = 14;
-
-    static readonly IImmutableSolidColorBrush[] gemColors =
-    [
-        Brushes.Beige,
-        Brushes.Yellow,
-        Brushes.Red,
-        Brushes.Indigo
-    ];
+    private GemHelper _gemHelper = new GemHelper();
+    private static Random rnd = new Random();
     
-    [ObservableProperty]
-    private List<Gem> _gems = new List<Gem>();
+    private Gem[,] _gemDesk;
+    public static int ColCount { get; set; } = 3;
+    public static int RowCount { get; set; } = 5;
 
-    public MainViewModel()
+
+    public IEnumerable<Gem> Gems
     {
-        Random rnd = new();
+        get
+        {
+            for (int i = 0; i < RowCount; i++)
+            {
+                for (int j = 0; j < ColCount; j++)
+                {
+                    yield return _gemDesk[i, j];
+                }
+            }
+        }
+    } 
+
+    
+    private void InitDesk(int rowCount, int colCount)
+    {
+        if (rowCount <= 0 || colCount <= 0)
+            throw new ArgumentException("RowCount and ColCount must be greater than 0");
+        
+        int len = Enum.GetNames(typeof(GemKind)).Length; // Количество видов камней
+
+
+        int fullSeries = (rowCount * colCount / _gemHelper.KindsCount) * _gemHelper.KindsCount;
+        int n = 0;
+        for (int i = 0; i < RowCount; i++)
+        {
+            for (int j = 0; j < ColCount; j++)
+            {
+                if (n < fullSeries)
+                {
+                    _gemDesk[i, j] = _gemHelper.GetNext(n);
+                    n++;
+                }
+                else
+                {
+                    _gemDesk[i, j] = _gemHelper.GetRandom();
+                }
+            }
+        }
+    }
+
+    private void Suffle()
+    {
+        Gem[] items = _gemDesk.Cast<Gem>().ToArray();
+        rnd.Shuffle<Gem>(items);
         for (int i = 0; i < RowCount; i++)
         for (int j = 0; j < ColCount; j++)
         {
-            int c = rnd.Next(0, Enum.GetNames(typeof(GemKind)).Length);
-            _gems.Add(new Gem {Status = 0, Kind = (GemKind) c });
+            _gemDesk[i, j] = items[i * ColCount + j];
+            _gemDesk[i, j].IsHot = (rnd.Next(0, 2) == 0);
         }
+    }
+
+    public MainViewModel()
+    {
+        _gemDesk = new Gem[RowCount, ColCount];
+        InitDesk(RowCount, ColCount);
+        Suffle();
     }
 }
