@@ -13,17 +13,21 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="10*, 70*, 20*">
-        <TextBlock
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Text="Магические камни. Предсказание" />
+        <StackPanel Orientation="Vertical">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Магические камни. Предсказание" />
+            <TextBlock Text="{Binding GemList.Count}" />
+        </StackPanel>
+
         <Border Grid.Row="1"
                 Margin="10, 5,10,5"
                 Padding="0"
                 BorderThickness="2"
                 BorderBrush="Khaki"
                 CornerRadius="8">
-            
+
             <ListBox Margin="2" Padding="8" ItemsSource="{Binding GemList}">
                 <ListBox.Background>
                     <ImageBrush
@@ -35,7 +39,7 @@
                         TileMode="FlipXY"
                         DestinationRect="0 0 180 180" />
                 </ListBox.Background>
-                
+
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid
@@ -44,9 +48,18 @@
                             Rows="{Binding RowCount}" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="vm:Gem">
+                        <!-- <vm:Gem Height="40" Width="40" GemColor="{Binding GemColor}" /> -->
+
+                        <vm:GemControl GemColor="{Binding Color}" Width="30" Height="30"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
         </Border>
+
         <Button Grid.Row="2"
+                Command="{Binding StartCommand}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 CornerRadius="8"
@@ -54,40 +67,11 @@
             Start
         </Button>
     </Grid>
-    
-    
-    
+
+
     <UserControl.Styles>
-        <Style Selector="Rectangle[Tag=Blue]">
-            <Setter Property="Fill" Value="{DynamicResource BlueGem}" />
-        </Style>
-        <Style Selector="Rectangle[Tag=Red]">
-            <Setter Property="Fill" Value="{DynamicResource RedGem}" />
-        </Style>
-        
-        <Style Selector="ListBoxItem">
-            <Setter Property="Margin" Value="0" />
-            <Setter Property="Padding" Value="2" />
-        </Style>
-        <Style Selector="ListBoxItem Rectangle.Gem">
-            <!--
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Height" Value="40" />
-            -->
-            <Setter Property="Stretch" Value="Fill"></Setter>
-        </Style>
-        
-        <Style Selector="ListBoxItem Rectangle.blue">
+        <Style Selector="vm|GemControl[GemColor=1]">
             <Setter Property="Fill" Value="Blue" />
-        </Style>
-        <Style Selector="ListBoxItem Rectangle.white">
-            <Setter Property="Fill" Value="Bisque" />
-        </Style>
-        <Style Selector="ListBoxItem Rectangle.red">
-            <Setter Property="Fill" Value="Firebrick" />
-        </Style>
-        <Style Selector="ListBoxItem Rectangle.yellow">
-            <Setter Property="Fill" Value="YellowGreen" />
         </Style>
     </UserControl.Styles>
 </UserControl>
