@@ -1,108 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Avalonia.Data.Converters;
-using Avalonia.Media;
-using CommunityToolkit.Mvvm.ComponentModel;
-
+using System.Collections.ObjectModel;
+using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Shapes;
+using MagicGems.Core;
 
 namespace Predict1.ViewModels;
 
-public enum GemKind
+[PseudoClasses(":Hot", ":Light")]
+public class Gem : Rectangle
 {
-    White,
-    Red,
-    Blue,
-    Yellow,
-}
+    public int Color { get; }
+    private bool _hot = false;
 
-public class Gem
-{
-    public int Status { get; set; } = 0;
-    public bool IsHot { get; set; } = false;
-    public GemKind Kind { get; set; } = GemKind.White;
-    public override string ToString()
+    public bool Hot
     {
-        return $"Gem_{Kind}";
+        get => _hot;
+        set
+        {
+            _hot = value;
+            PseudoClasses.Set(":Hot", value);
+        }
     }
-}
 
-public class GemHelper
-{
-    public int KindsCount => Enum.GetNames(typeof(GemKind)).Length; // Количество видов камней
-    public Gem GetNext(int n) => new() { Status = 0, Kind = (GemKind) (n % KindsCount) };
-    public Gem GetRandom() => new() { Status = 0, Kind = (GemKind) Random.Shared.Next( KindsCount) };
+    private bool _ligth = false;
+
+    public bool Ligth
+    {
+        get => _ligth;
+        set
+        {
+            _ligth = value;
+            PseudoClasses.Set(":Ligth", value);
+        }
+    }
+
+    public Gem(int color, bool hot)
+    {
+        Color = color;
+        Hot = hot;
+    }
+
+    public Gem() : this(0, false)
+    {
+    }
+
 }
 
 public partial class MainViewModel : ViewModelBase
 {
-    private GemHelper _gemHelper = new GemHelper();
-    private static Random rnd = new Random();
-    
-    private Gem[,] _gemDesk;
-    public static int ColCount { get; set; } = 3;
-    public static int RowCount { get; set; } = 5;
+    private readonly List<string> _gemColors =
+    [
+        "White",
+        "Red",
+        "Blue",
+        "Yellow",
+    ];
 
+    private readonly GemDesk _desk;
+    public int RowCount { get => _desk.RowCount; }
+    public int ColumnCount { get => _desk.ColumnCount; }
 
-    public IEnumerable<Gem> Gems
-    {
-        get
-        {
-            for (int i = 0; i < RowCount; i++)
-            {
-                for (int j = 0; j < ColCount; j++)
-                {
-                    yield return _gemDesk[i, j];
-                }
-            }
-        }
-    } 
-
-    
-    private void InitDesk(int rowCount, int colCount)
-    {
-        if (rowCount <= 0 || colCount <= 0)
-            throw new ArgumentException("RowCount and ColCount must be greater than 0");
-        
-        int len = Enum.GetNames(typeof(GemKind)).Length; // Количество видов камней
-
-
-        int fullSeries = (rowCount * colCount / _gemHelper.KindsCount) * _gemHelper.KindsCount;
-        int n = 0;
-        for (int i = 0; i < RowCount; i++)
-        {
-            for (int j = 0; j < ColCount; j++)
-            {
-                if (n < fullSeries)
-                {
-                    _gemDesk[i, j] = _gemHelper.GetNext(n);
-                    n++;
-                }
-                else
-                {
-                    _gemDesk[i, j] = _gemHelper.GetRandom();
-                }
-            }
-        }
-    }
-
-    private void Suffle()
-    {
-        Gem[] items = _gemDesk.Cast<Gem>().ToArray();
-        rnd.Shuffle<Gem>(items);
-        for (int i = 0; i < RowCount; i++)
-        for (int j = 0; j < ColCount; j++)
-        {
-            _gemDesk[i, j] = items[i * ColCount + j];
-            _gemDesk[i, j].IsHot = (rnd.Next(0, 2) == 0);
-        }
-    }
+    private ObservableCollection<Gem> GemList { get; } = new ObservableCollection<Gem>();
 
     public MainViewModel()
     {
-        _gemDesk = new Gem[RowCount, ColCount];
-        InitDesk(RowCount, ColCount);
-        Suffle();
+        _desk = new GemDesk(5, 5, _gemColors.Count);
+        GemList.Clear();
+        foreach (int i in _desk.Items)
+        {
+            Gem g = new Gem(i, false);
+            GemList.Add(g);
+        }
     }
 }
