@@ -3,20 +3,29 @@
              xmlns:local="using:Predict1"
              x:Class="Predict1.App"
              RequestedThemeVariant="Dark">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
-             
-<Application.Resources>
-    <SolidColorBrush x:Key="YellowGem">Yellow</SolidColorBrush>
-    <SolidColorBrush x:Key="RedGem">Red</SolidColorBrush>
-    <SolidColorBrush x:Key="WhiteGem">Bisque</SolidColorBrush>
-    <SolidColorBrush x:Key="BlueGem">BlueViolet</SolidColorBrush>
-</Application.Resources>             
+
+    <Application.Resources>
+        <SolidColorBrush x:Key="YellowGem">Yellow</SolidColorBrush>
+        <SolidColorBrush x:Key="RedGem">Red</SolidColorBrush>
+        <SolidColorBrush x:Key="WhiteGem">Bisque</SolidColorBrush>
+        <SolidColorBrush x:Key="BlueGem">BlueViolet</SolidColorBrush>
+        <ImageBrush x:Key="Wood"
+                    AlignmentX="Left"
+                    AlignmentY="Top"
+                    Source="/Assets/Wood/i_1.jpg"
+                    SourceRect="0 0 180 180"
+                    Stretch="Fill"
+                    TileMode="FlipXY"
+                    DestinationRect="0 0 180 180" />
+        
+    </Application.Resources>
 </Application>

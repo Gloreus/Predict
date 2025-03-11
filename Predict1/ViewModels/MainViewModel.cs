@@ -12,40 +12,18 @@ namespace Predict1.ViewModels;
 public class GemControl:Rectangle
 {
     public int GemColor { get; set; }
-    private bool _hot = false;
+
+    public bool Hot { get; set; }
+
     public static readonly StyledProperty<int> GemColorProperty =
         AvaloniaProperty.Register<GemControl, int>(nameof(GemColor), defaultValue: 0);
-    public bool Hot
-    {   
-        get => _hot;
-        set
-        {
-            _hot = value;
-        }
-    }
-
-    private bool _ligth = false;
-
-    public bool Ligth
-    {
-        get => _ligth;
-        set
-        {
-            _ligth = value;
-        }
-    }
-
-    public GemControl(int color, bool hot)
-    {
-        GemColor = color;
-        Hot = hot;
-        Ligth = false;
-    }
-
-    public GemControl() : this(0, false)
-    {
-    }
     
+    public static readonly StyledProperty<bool> HotProperty =
+        AvaloniaProperty.Register<GemControl, bool>(nameof(Hot), defaultValue: false);
+    
+    public static readonly StyledProperty<bool> LightProperty =
+        AvaloniaProperty.Register<GemControl, bool>(nameof(Gem.Light), defaultValue: false);
+
     public override string ToString()
     {
         return GemColor.ToString();
@@ -54,36 +32,34 @@ public class GemControl:Rectangle
 
 public class Gem
 {
-    public int Color { get; set; } = 0;
-    public bool Hot { get; set; } = false;
+    private readonly int _value;
+    public int Color => int.Abs(_value);
+    public bool Hot  => _value > 0;
+    public bool Light { get; set; } = false;
 
-    public Gem(int color, bool hot)
+    public Gem(int color)
     {
-        Color = color;
-        Hot = hot;
+        _value = color;
     }
 }
 
 public partial class MainViewModel : ViewModelBase
 {
-    private readonly List<string> _gemColors =
-    [
-        "White",
-        "Red",
-        "Blue",
-        "Yellow",
-    ];
-
     private readonly GemDesk _desk;
-    public int RowCount { get => _desk.RowCount; }
-    public int ColumnCount { get => _desk.ColumnCount; }
+    private readonly int _colorCount =4;
+    public int RowCount => _desk.RowCount;
+    public int ColumnCount => _desk.ColumnCount;
 
+    public Gem HotGem => new Gem(2);
+    public Gem ColdGem => new Gem(-3);
+    
+    
     [ObservableProperty]
     private ObservableCollection<Gem> _gemList  = new ObservableCollection<Gem>();
 
     public MainViewModel()
     {
-        _desk = new GemDesk(5, 5, _gemColors.Count);
+        _desk = new GemDesk(5, 5, _colorCount);
         RefreshGems();
     }
 
@@ -92,7 +68,7 @@ public partial class MainViewModel : ViewModelBase
         GemList.Clear();
         foreach (int i in _desk.Items)
         {
-            Gem g = new Gem(i, false);
+            Gem g = new Gem(i);
             GemList.Add(g);
         }
     }

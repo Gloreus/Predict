@@ -22,13 +22,14 @@
         </StackPanel>
 
         <Border Grid.Row="1"
+                Background="{DynamicResource  Wood}"
                 Margin="10, 5,10,5"
                 Padding="0"
                 BorderThickness="2"
                 BorderBrush="Khaki"
                 CornerRadius="8">
 
-            <ListBox Margin="2" Padding="8" ItemsSource="{Binding GemList}">
+            <!--<ListBox Margin="2" Padding="8" ItemsSource="{Binding GemList}">
                 <ListBox.Background>
                     <ImageBrush
                         AlignmentX="Left"
@@ -50,12 +51,38 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="vm:Gem">
-                        <!-- <vm:Gem Height="40" Width="40" GemColor="{Binding GemColor}" /> -->
-
-                        <vm:GemControl GemColor="{Binding Color}" Width="30" Height="30"/>
+                        ~1~ <vm:Gem Height="40" Width="40" GemColor="{Binding GemColor}" /> @1@
+                        <StackPanel Orientation="Horizontal">                        
+                            <vm:GemControl 
+                                GemColor ="{Binding Color }"
+                                Hot="{Binding Hot}"
+                                Width="30" Height="30" />
+                            
+                            <TextBlock Text="{Binding Color}"></TextBlock>
+                            <TextBlock Text="{Binding Hot}"></TextBlock>
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>
+            </ListBox>-->
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Panel  Width="100" Height="100" Margin="4">
+                <Rectangle Classes="GemOuter Hot"
+                           StrokeDashArray="5, 2" RadiusX="5" RadiusY="5"
+                           StrokeLineCap="Round"
+                           StrokeThickness="4"
+                           Focusable="True"
+                            />
+                <Rectangle Margin="4" Stretch="Fill" Fill="Red"/>
+            </Panel>
+                
+            <Panel Margin="4" Width="100" Height="100">
+                <Rectangle Classes="GemOuter Cold"
+                           StrokeDashArray="5, 2" RadiusX="5" RadiusY="5"
+                           StrokeLineCap="Round"
+                           StrokeThickness="4"
+                            />
+            </Panel>
+            </StackPanel>
         </Border>
 
         <Button Grid.Row="2"
@@ -68,10 +95,42 @@
         </Button>
     </Grid>
 
+    <!--
+    https://github.com/AvaloniaUI/Avalonia/discussions/14324
+    -->
 
     <UserControl.Styles>
+        <Style Selector="Rectangle.GemOuter">
+            <Setter Property="Stretch" Value="Fill"/> 
+            <Setter Property="StrokeDashOffset" Value="0"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="StrokeDashOffset" Duration="0:0:0.5" />
+                </Transitions>
+            </Setter>
+            <Style Selector="^:pointerover">
+                <Setter Property="StrokeDashOffset" Value="7"/>
+            </Style>
+        </Style>
+        <Style Selector="Rectangle.Hot">
+            <Setter Property="Stroke" Value="Crimson" />
+            <Setter Property="Fill" Value="Red" />
+        </Style>
+        <Style Selector="Rectangle.Cold">
+            <Setter Property="Stroke" Value="DodgerBlue" />
+        </Style>
+
         <Style Selector="vm|GemControl[GemColor=1]">
-            <Setter Property="Fill" Value="Blue" />
+            <Setter Property="Fill" Value="Firebrick" />
+        </Style>
+        <Style Selector="vm|GemControl[GemColor=2]">
+            <Setter Property="Fill" Value="Navy" />
+        </Style>
+        <Style Selector="vm|GemControl[GemColor=3]">
+            <Setter Property="Fill" Value="Yellow" />
+        </Style>
+        <Style Selector="vm|GemControl[GemColor=4]">
+            <Setter Property="Fill" Value="White" />
         </Style>
     </UserControl.Styles>
 </UserControl>
