@@ -66,21 +66,10 @@
             </ListBox>-->
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <Panel  Width="100" Height="100" Margin="4">
-                <Rectangle Classes="GemOuter Hot"
-                           StrokeDashArray="5, 2" RadiusX="5" RadiusY="5"
-                           StrokeLineCap="Round"
-                           StrokeThickness="4"
-                           Focusable="True"
-                            />
-                <Rectangle Margin="4" Stretch="Fill" Fill="Red"/>
             </Panel>
                 
             <Panel Margin="4" Width="100" Height="100">
-                <Rectangle Classes="GemOuter Cold"
-                           StrokeDashArray="5, 2" RadiusX="5" RadiusY="5"
-                           StrokeLineCap="Round"
-                           StrokeThickness="4"
-                            />
+                <vm:GemControl Width="60" Height="60" GemColor="2" />
             </Panel>
             </StackPanel>
         </Border>
@@ -100,37 +89,9 @@
     -->
 
     <UserControl.Styles>
-        <Style Selector="Rectangle.GemOuter">
-            <Setter Property="Stretch" Value="Fill"/> 
-            <Setter Property="StrokeDashOffset" Value="0"/>
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="StrokeDashOffset" Duration="0:0:0.5" />
-                </Transitions>
-            </Setter>
-            <Style Selector="^:pointerover">
-                <Setter Property="StrokeDashOffset" Value="7"/>
-            </Style>
-        </Style>
-        <Style Selector="Rectangle.Hot">
-            <Setter Property="Stroke" Value="Crimson" />
-            <Setter Property="Fill" Value="Red" />
-        </Style>
-        <Style Selector="Rectangle.Cold">
-            <Setter Property="Stroke" Value="DodgerBlue" />
+        <Style Selector="vm|GemControl[GemColor=2]">
+            <Setter Property="GemBrush" Value="Green"/>
         </Style>
 
-        <Style Selector="vm|GemControl[GemColor=1]">
-            <Setter Property="Fill" Value="Firebrick" />
-        </Style>
-        <Style Selector="vm|GemControl[GemColor=2]">
-            <Setter Property="Fill" Value="Navy" />
-        </Style>
-        <Style Selector="vm|GemControl[GemColor=3]">
-            <Setter Property="Fill" Value="Yellow" />
-        </Style>
-        <Style Selector="vm|GemControl[GemColor=4]">
-            <Setter Property="Fill" Value="White" />
-        </Style>
     </UserControl.Styles>
 </UserControl>
