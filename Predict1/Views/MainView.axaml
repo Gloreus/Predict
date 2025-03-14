@@ -64,24 +64,28 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>-->
+
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Panel  Width="100" Height="100" Margin="4">
-            </Panel>
-                
-            <Panel Margin="4" Width="100" Height="100">
-                <vm:GemControl Width="60" Height="60" GemColor="2" />
-            </Panel>
+                <vm:GemControl Width="60" Height="60" Gem="{Binding ColdGem}" />
+                <TextBlock Text="{Binding ColdGem.GemColor}" />
+                <TextBlock Text="{Binding ColdGem.Status}" />
             </StackPanel>
         </Border>
 
-        <Button Grid.Row="2"
-                Command="{Binding StartCommand}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                CornerRadius="8"
-                Padding="10 5 10 5">
-            Start
-        </Button>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button 
+                    Command="{Binding StartCommand}"
+                    CornerRadius="8"
+                    Padding="10 5 10 5">
+                Start
+            </Button>
+            <Button 
+                    Command="{Binding SetHotCommand}"
+                    CornerRadius="8"
+                    Padding="10 5 10 5">
+                Mark
+            </Button>
+        </StackPanel>
     </Grid>
 
     <!--
@@ -90,7 +94,13 @@
 
     <UserControl.Styles>
         <Style Selector="vm|GemControl[GemColor=2]">
-            <Setter Property="GemBrush" Value="Green"/>
+            <Setter Property="GemBrush" Value="Green" />
+        </Style>
+        <Style Selector="vm|GemControl[GemColor=3]">
+            <Setter Property="GemBrush" Value="LightYellow" />
+        </Style>
+        <Style Selector="vm|GemControl:cold">
+            <Setter Property="GemBrush" Value="Purple" />
         </Style>
 
     </UserControl.Styles>
